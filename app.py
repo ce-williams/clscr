@@ -31,6 +31,30 @@ class CraigslistScraper(object):
         except TimeoutException:
             print("Loading took too much time, try increasing delay wait")
 
+    def extract_post_titles(self):
+        all_posts = self.driver.find_elements_by_class_name("result-row")
+        post_title_list = []
+        for post in all_posts:
+            print(post.text)
+            post_title_list.append(post.text)
+        return post_title_list
+    
+    
+    def extract_post_urls(self):
+        url_list = []
+        # allows us to use our custom url in the 'self' object and convert to a string to be used in bs4
+        html_page = urllib.request.urlopen(self.url)
+        soup = BeautifulSoup(html_page, "lxml")
+        for link in soup.findAll("a", {"class": "result-title hdrlnk"}):
+            print(link["href"])
+            url_list.append(link["href"])
+        return url_list
+    # closes browser
+    def quit(self):
+        self.driver.close()
+
+
+
 
 
 location = "sfbay"
@@ -40,3 +64,6 @@ radius = "5"
 
 scraper = CraigslistScraper(location, postal, max_price, radius)
 scraper.load_craigslist_url()
+scraper.extract_post_titles()
+scraper.extract_post_urls()
+scraper.quit()
