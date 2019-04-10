@@ -40,7 +40,3 @@ radius = "5"
 
 scraper = CraigslistScraper(location, postal, max_price, radius)
 scraper.load_craigslist_url()
-
-
-
-
